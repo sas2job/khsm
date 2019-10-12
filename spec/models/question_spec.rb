@@ -1,5 +1,4 @@
-# (c) goodprogrammer.ru
-
+# Стандартный rspec-овский помощник для rails-проекта
 require 'rails_helper'
 
 # Тестовый сценарий для модели Вопрос
@@ -21,7 +20,6 @@ RSpec.describe Question, type: :model do
 
     # --- Вариант решения ДЗ -------------
 
-    # подсказка: читать доку на метод validate_uniqueness_of, там примеры
     # явно создаем "предмет тестирования" - валидный объект
     subject { Question.new(text: 'some', level: 0, answer1: '1', answer2: '1', answer3: '1', answer4: '1') }
 
