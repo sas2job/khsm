@@ -140,4 +140,38 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.previous_level).to eq 1
     end
   end
+
+  #--------------- 61 - 7 --------------------
+  context '.answer_current_question!' do
+    let(:q) { game_w_questions.current_game_question }
+
+    it 'returns true if answer is correct and game stays in_progress' do
+      expect(game_w_questions.answer_current_question!(q.correct_answer_key)).to be_truthy
+      expect(game_w_questions.status).to eq :in_progress
+      expect(game_w_questions.finished?).to be_falsey
+    end
+
+    it 'returns false if answer is incorrect and changes status to :fail' do
+      expect(game_w_questions.answer_current_question!('a')).to be_falsey
+      expect(game_w_questions.status).to eq :fail
+      expect(game_w_questions.finished?).to be_truthy
+    end
+
+    it 'changes status to :won when last question answered and sets prize to 1 000 000' do
+      game_w_questions.current_level = Question::QUESTION_LEVELS.max
+
+      expect(game_w_questions.answer_current_question!(q.correct_answer_key)).to be_truthy
+      expect(game_w_questions.status).to eq :won
+      expect(game_w_questions.prize).to eq(1000000)
+      expect(game_w_questions.finished?).to be_truthy
+    end
+
+    it 'returns false if timed out and changes status to :timeout' do
+      game_w_questions.created_at = Time.now - Game::TIME_LIMIT
+
+      expect(game_w_questions.answer_current_question!(q.correct_answer_key)).to be_falsey
+      expect(game_w_questions.status).to eq :timeout
+      expect(game_w_questions.finished?).to be_truthy
+    end
+  end
 end
