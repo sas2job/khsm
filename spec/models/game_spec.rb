@@ -122,4 +122,22 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.status).to eq(:money)
     end
   end
+
+  #--------------- 61 - 6 --------------------
+
+  context '.current_game_question' do
+    it 'returns first question for a new game' do
+      expect(game_w_questions.current_game_question).to eq game_w_questions.game_questions[0]
+    end
+  end
+
+  context '.previous_level' do
+    it 'returns 1 when 2 questions had been answered' do
+      2.times do
+        q = game_w_questions.current_game_question
+        game_w_questions.answer_current_question!(q.correct_answer_key)
+      end
+      expect(game_w_questions.previous_level).to eq 1
+    end
+  end
 end
