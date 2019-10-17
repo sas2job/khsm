@@ -146,7 +146,7 @@ RSpec.describe Game, type: :model do
     let(:q) { game_w_questions.current_game_question }
 
     it 'returns true if answer is correct and game stays in_progress' do
-      expect(game_w_questions.answer_current_question!(q.correct_answer_key)).to be_truthy
+      expect(game_w_questions.answer_current_question!('d')).to be_truthy
       expect(game_w_questions.status).to eq :in_progress
       expect(game_w_questions.finished?).to be_falsey
     end
@@ -160,7 +160,7 @@ RSpec.describe Game, type: :model do
     it 'changes status to :won when last question answered and sets prize to 1 000 000' do
       game_w_questions.current_level = Question::QUESTION_LEVELS.max
 
-      expect(game_w_questions.answer_current_question!(q.correct_answer_key)).to be_truthy
+      expect(game_w_questions.answer_current_question!('d')).to be_truthy
       expect(game_w_questions.status).to eq :won
       expect(game_w_questions.prize).to eq(1000000)
       expect(game_w_questions.finished?).to be_truthy
