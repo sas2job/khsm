@@ -93,7 +93,19 @@ RSpec.describe GamesController, type: :controller do
       expect(flash.empty?).to be_truthy # удачный ответ не заполняет flash
     end
 
-    # проверка, что пользовтеля посылают из чужой игры
+    it 'gives a wrong answer' do
+      wrong_variant = %w[a b c d].find { |key| key != game_w_questions.current_game_question.correct_answer_key }
+      put :answer, id: game_w_questions.id, letter: wrong_variant
+      game = assigns(:game)
+
+      expect(game.finished?).to be true
+      expect(game.status).to eq :fail
+      expect(game.current_level).to eq(0)
+      expect(flash[:alert]).to be
+      expect(response).to redirect_to(user_path(user))
+    end
+
+    # проверка, что пользователя посылают из чужой игры
     it '#show alien game' do
       # создаем новую игру, юзер не прописан, будет создан фабрикой новый
       alien_game = FactoryBot.create(:game_with_questions)
