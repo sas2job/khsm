@@ -14,7 +14,7 @@ RSpec.describe GamesController, type: :controller do
     # из экшена show анона посылаем
     it 'kick from #show' do
       # вызываем экшен
-      get :show, params: { id: game_w_questions.id }
+      get :show, id: game_w_questions.id
       # проверяем ответ
       expect(response.status).not_to eq(200) # статус не 200 ОК
       expect(response).to redirect_to(new_user_session_path) # devise должен отправить на логин
@@ -45,7 +45,7 @@ RSpec.describe GamesController, type: :controller do
 
     # Пользователь видит свою игру
     it '#show game' do
-      get :show, params: { id: game_w_questions.id }
+      get :show, id: game_w_questions.id
       game = assigns(:game) # вытаскиваем из контроллера поле @game
       expect(game.finished?).to be_falsey
       expect(game.user).to eq(user)
@@ -57,7 +57,7 @@ RSpec.describe GamesController, type: :controller do
     # Пользователь отвечает на игру корректно - игра продолжается
     it 'answers correct' do
       # передаем параметр params[:letter]
-      put :answer, params: { id: game_w_questions.id, letter: game_w_questions.current_game_question.correct_answer_key }
+      put :answer, id: game_w_questions.id, letter: game_w_questions.current_game_question.correct_answer_key
       game = assigns(:game)
 
       expect(game.finished?).to be_falsey
@@ -72,7 +72,7 @@ RSpec.describe GamesController, type: :controller do
       alien_game = FactoryBot.create(:game_with_questions)
 
       # пробуем зайти на эту игру текущий залогиненным user
-      get :show, params: { id: alien_game.id }
+      get :show, id: alien_game.id
 
       expect(response.status).not_to eq(200) # статус не 200 ОК
       expect(response).to redirect_to(root_path)
@@ -84,7 +84,7 @@ RSpec.describe GamesController, type: :controller do
       # вручную поднимем уровень вопроса до выигрыша 200
       game_w_questions.update_attribute(:current_level, 2)
 
-      put :take_money, params: { id: game_w_questions.id }
+      put :take_money, id: game_w_questions.id
       game = assigns(:game)
       expect(game.finished?).to be_truthy
       expect(game.prize).to eq(200)
