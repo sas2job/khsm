@@ -94,8 +94,7 @@ RSpec.describe GamesController, type: :controller do
     end
 
     it 'gives a wrong answer' do
-      wrong_variant = %w[a b c d].find { |key| key != game_w_questions.current_game_question.correct_answer_key }
-      put :answer, id: game_w_questions.id, letter: wrong_variant
+      put :answer, id: game_w_questions.id, letter: "c"
       game = assigns(:game)
 
       expect(game.finished?).to be true
