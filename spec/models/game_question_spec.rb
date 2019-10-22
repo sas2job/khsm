@@ -44,4 +44,51 @@ RSpec.describe GameQuestion, type: :model do
       expect(game_question.correct_answer_key).to eq('b')
     end
   end
+
+  #------ 63 --------------------
+  context 'user helpers' do
+    it 'correct audience_help' do
+      expect(game_question.help_hash).not_to include(:audience_help)
+
+      game_question.add_audience_help
+
+      expect(game_question.help_hash).to include(:audience_help)
+
+      ah = game_question.help_hash[:audience_help]
+      expect(ah.keys).to contain_exactly('a', 'b', 'c', 'd')
+    end
+  end
+
+  context '.help_hash' do
+    it 'stores all hints data in correct hash' do
+      # на фабрике у нас изначально хэш пустой
+      expect(game_question.help_hash).to eq({})
+
+      # добавляем пару ключей
+      game_question.help_hash[:some_key1] = 'blabla1'
+      game_question.help_hash['some_key2'] = 'blabla2'
+
+      # сохраняем модель и ожидаем сохранения хорошего
+      expect(game_question.save).to be_truthy
+
+      # загрузим этот же вопрос из базы для чистоты эксперимента
+      gq = GameQuestion.find(game_question.id)
+
+      # проверяем новые значение хэша
+      expect(gq.help_hash).to eq({some_key1: 'blabla1', 'some_key2' => 'blabla2'})
+    end
+  end
+
+  context 'user helpers' do
+    it 'correct audience_help' do
+      expect(game_question.help_hash).not_to include(:audience_help)
+
+      game_question.add_audience_help
+
+      expect(game_question.help_hash).to include(:audience_help)
+
+      ah = game_question.help_hash[:audience_help]
+      expect(ah.keys).to contain_exactly('a', 'b', 'c', 'd')
+    end
+  end
 end
