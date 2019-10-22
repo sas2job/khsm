@@ -103,5 +103,16 @@ RSpec.describe GameQuestion, type: :model do
       expect(game_question.help_hash[:friend_call]).to include("считает, что это вариант")
       expect(game_question.help_hash[:friend_call]).to match(/.+[ABCD]/)
     end
+
+    it 'correct fifty_fifty help' do
+      expect(game_question.help_hash).not_to include(:fifty_fifty)
+
+      game_question.add_fifty_fifty
+
+      expect(game_question.help_hash).to include(:fifty_fifty)
+
+      expect(game_question.help_hash[:fifty_fifty]).to include('b')
+      expect(game_question.help_hash[:fifty_fifty].size).to eq 2
+    end
   end
 end
