@@ -90,5 +90,18 @@ RSpec.describe GameQuestion, type: :model do
       ah = game_question.help_hash[:audience_help]
       expect(ah.keys).to contain_exactly('a', 'b', 'c', 'd')
     end
+
+
+    it 'correct friend_call help' do
+      expect(game_question.help_hash).not_to include(:friend_call)
+
+      game_question.add_friend_call
+
+      expect(game_question.help_hash).to include(:friend_call)
+
+      expect(game_question.help_hash[:friend_call]).to be_a(String)
+      expect(game_question.help_hash[:friend_call]).to include("считает, что это вариант")
+      expect(game_question.help_hash[:friend_call]).to match(/.+[ABCD]/)
+    end
   end
 end
