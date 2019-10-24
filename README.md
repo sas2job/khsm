@@ -22,7 +22,7 @@ In `terminal` or `cmd`
 
 - `$ bundle install`
 
-- `$ rails db:migrate`
+- `$ rake db:migrate`
 
 - `$ rails s` for server starting
 
