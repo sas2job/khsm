@@ -24,7 +24,7 @@ RSpec.feature 'USER views other user profile', type: :feature do
     )
   end
   let!(:games) { [first_game, second_game] }
-
+  let(:user) { FactoryBot.create(:user, name: 'serg') }
   scenario 'anonim views user profile' do
     visit '/'
 
